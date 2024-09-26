@@ -5,22 +5,31 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
     />
     <meta
       http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
     />
+    <style>
+      .wrapper {
+        display: flex;
+      }
+      .player-wrapper {
+        order: 0
+        width: 300px;
+      }
+      .some-other-thing {
+        order: 1;
+      }
+      .player-wrapper .controls {
+        display: flex;
+      }
+    </style>
     <title>title</title>
   </head>
   <body>
     <script src="./renderer.js"></script>
-
     <div id="root"></div>
-
-    <div>
-      <audio controls src="./sound.mp3"></audio>
-      <audio controls src="E:\music\!Bandcamp\$uiciderecord$\arcade trauma & gut spiller - It will all end in tears\arcade trauma - It will all end in tears - 01 deleted life.ogg"></audio>
-    </div>
   </body>
 </html>

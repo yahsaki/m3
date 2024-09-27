@@ -49,8 +49,8 @@ function createPlayer() {
   const cover = ce('div',[{name:'class',val:'cover'}],null,playerWrapper)
   const coverImage = ce('img',[{name:'id',val:'img-cover'},{name:'width',val:'280px'}],null,cover)
   const controls = ce('div',[{name:'class',val:'controls'}],null,playerWrapper)
-  const buttonNext = ce('button',[{name:'id',val:'btn-player-next'}],'NEXT',controls)
   const buttonPrevious = ce('button',[{name:'id',val:'btn-player-previous'}],'PREV',controls)
+  const buttonNext = ce('button',[{name:'id',val:'btn-player-next'}],'NEXT',controls)
   const tdval = `${_playlist.state.currentTrack+1}/${_playlist.tracks.length}`
   const trackDisplay = ce('div',[{name:'id',val:'div-track-display'}],tdval,controls)
   const audio = ce('audio', [

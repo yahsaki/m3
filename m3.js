@@ -91,6 +91,27 @@ const api = {
     }
 
     console.log('alright I think everything is handled now')
+    return {
+      playlist: defaultPlaylist,
+      entityData,
+      state,
+    }
+  },
+  state: {
+    get: () => {
+
+    },
+    save: async (state) => {
+      if (typeof state !== 'object') {
+        throw Error(`m3.state.save: received some nonsense`, state)
+      }
+      console.log('state.save: saving state', state)
+      const entityPath = path.join(__dirname, util.settings.localDataFolderName, selectedEntityName)
+      util.fs.mkdir(entityPath) // this makes me feel much gooder
+      const statePath = path.join(entityPath, 'state.json')
+      util.fs.writeJson(statePath, state, true)
+      return
+    },
   },
 }
 module.exports = api

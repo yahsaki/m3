@@ -19,53 +19,34 @@
     <title>title</title>
   </head>
   <body>
-    <audio id="audio" controls src="C:\_test_music_folder\android52\android52 - NONPLUSULTRA\android52 - NONPLUSULTRA - 02 If You Can.ogg" />
+    <div id="root">
+      <div class="wrapper">
+        <div class="player-wrapper">
+          <div id="div-info">
+            <div>Song: android52 - NONPLUSULTRA - 12 Turn Me On</div>
+            <div>Tags: edm, poop</div>
+          </div>
+          <div class="cover">
+            <img id="img-cover" width="280px" src="C:\_test_music_folder\android52\android52 - NONPLUSULTRA\cover.png">
+          </div>
+          <div class="controls">
+            <button id="btn-player-previous">PREV</button>
+            <button id="btn-player-next">NEXT</button>
+            <div id="div-track-display">3/56</div>
+          </div>
+          <audio controls="" src="C:\_test_music_folder\android52\android52 - NONPLUSULTRA\android52 - NONPLUSULTRA - 12 Turn Me On.ogg" id="audio-player"></audio>
+          <div class="tag-wrapper">
+            <div class="existing-tags-wrapper">
+              <button>electronic</button>
+              <button>manhwa</button>
+            </div>
+            <input type="text" title="add tags comma separated" />
+            <button>SAVE</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
-      const _state = {
-        track: 0, // which track we're on
-        paused: false,
-        currentTime: 0,
-        volume: 1, //float, 1 = max, 0.5 = 50%
-      }
-      window.addEventListener('DOMContentLoaded', () => {
-        console.log('content loaded')
-        const audio = document.getElementById('audio')
-        audio.addEventListener('play', (e) => {
-          // Playback has begun.
-          console.log('play', e)
-          _state.paused = false
-        })
-        audio.addEventListener('complete', (e) => {
-          // The rendering of an OfflineAudioContext is terminated.
-          console.log('complete', e)
-          // play next track
-          _state.paused = false
-          _state.currentTime = 0
-        })
-        audio.addEventListener('ended', (e) => {
-          // Playback has stopped because the end of the media was reached.
-          console.log('ended', e)
-          _state.paused = false
-          _state.currentTime = 0
-        })
-        audio.addEventListener('volumechange', (e) => {
-          // The volume has changed.
-          console.log('volumechange', e)
-          _state.volume = e.srcElement.volume
-        })
-        audio.addEventListener('pause', (e) => {
-          console.log('pause', e)
-          _state.paused = true
-          _state.currentTime = e.srcElement.currentTime
-        })
-
-
-        audio.addEventListener('playing', (e) => {
-          // Playback is ready to start after having been paused or delayed due to lack of data.
-          console.log('playing', e)
-          // dead
-        })
-      })
     </script>
   </body>
 </html>

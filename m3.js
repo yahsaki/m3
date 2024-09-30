@@ -97,9 +97,12 @@ const api = {
       state,
     }
   },
+  tags: {
+    save: metadata.tags.save,
+  },
   state: {
     get: () => {
-
+      throw Error('unimplemented')
     },
     save: async (state) => {
       if (typeof state !== 'object') {

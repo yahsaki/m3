@@ -121,6 +121,14 @@ function createPlayer() {
 
   buttonNext.addEventListener('click', playerButtonNextOnClick)
   buttonPrevious.addEventListener('click', playerButtonPreviousOnClick)
+
+  const tagWrapper = ce('div',[{name:'class',val:'tag-wrapper'}],null,playerWrapper)
+  const tagInput = ce('input',[
+    {name:'id',val:'txt-tags'},
+    {name:'title',val:'add tags comma separated'}
+  ],null,tagWrapper)
+  const saveTagsButton = ce('button',[{name:'id',val:'btn-save-tags'}],'SAVE',tagWrapper)
+  saveTagsButton.addEventListener('click', onSaveTagsClick)
 }
 
 function playerButtonNextOnClick() {
@@ -134,6 +142,39 @@ function playerButtonPreviousOnClick() {
     _state.track-=1
     playTrack()
   }
+}
+
+async function onSaveTagsClick() {
+  const val = document.getElementById('txt-tags')?.value
+  const audio = document.getElementById('audio-player')
+  if (!val?.length) {console.log(`nothing in tags textbox`);return}
+
+  console.log('tb val', val)
+  const tags = []
+  const arr = val.trim().split(',')
+  for (let i = 0; i < arr.length; i++) {
+    if (!arr[i].length) continue
+    const tag = arr[i].trim().toLowerCase()
+    if (!tag.length) continue
+    if (tags.find(x => x === tag)) continue
+    tags.push(tag)
+  }
+  if (!tags.length) return
+  const args = {
+    trackPath: decodeURI(document.getElementById('audio-player').src.split('file:///')[1]),
+    tags
+  }
+  const res = await window.electronAPI.saveTags(args)
+  /*
+    res = {
+      message: 'sorry no tags saved because you dubm',
+      data: {
+        addableTags: [],
+        currentTags: [],
+      }
+    }
+  */
+  // would like a message tbh
 }
 
 function playFirstSong(playlist) {

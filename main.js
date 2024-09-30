@@ -26,6 +26,7 @@ app.whenReady().then(() => {
       state: _data.state,
     }
   })
+  ipcMain.handle('saveTags', saveTags)
 
   createWindow()
   _data = m3.init()
@@ -38,10 +39,8 @@ app.whenReady().then(() => {
   })
 })
 
-async function saveState(event, args) {
-  await m3.state.save(args)
-  return
-}
+async function saveState(event, args) { await m3.state.save(args);return }
+async function saveTags(event, args) { await m3.tags.save(args);return }
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

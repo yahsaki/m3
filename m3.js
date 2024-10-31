@@ -29,7 +29,7 @@ const entities = {
       {
         // NOTE: sources can have the same exact album which will clap the current logic. sources should be named(uniqified) to prevent this.
         // I dont plan on ever scanning more than one music folder but in the case I do then this will need to be fixed
-        path: 'C:\\_test_music_folder',
+        path: 'D:\\Music\\!Bandcamp',
         type: 'bandcamp',
       }
     ],
@@ -108,7 +108,7 @@ const api = {
       if (typeof state !== 'object') {
         throw Error(`m3.state.save: received some nonsense`, state)
       }
-      console.log('state.save: saving state', state)
+      //console.log('state.save: saving state', state)
       const entityPath = path.join(__dirname, util.settings.localDataFolderName, selectedEntityName)
       util.fs.mkdir(entityPath) // this makes me feel much gooder
       const statePath = path.join(entityPath, 'state.json')

@@ -40,7 +40,7 @@ async function saveState() {
     _state.volume = audio.volume
     const saveStateRes = await window.electronAPI.saveState(_state)
     // saveStateRes is null
-    console.log('state saved')
+    //console.log('state saved')
     if (audio.paused) {
       clearInterval(intervalId)
     }
@@ -66,6 +66,7 @@ function playTrack() {
   const audio = document.getElementById('audio-player')
   audio.setAttribute('src', track.trackPath)
   audio.play()
+  console.log('playing track', track.trackPath)
   saveState()
 }
 function createPlayer() {
@@ -105,6 +106,8 @@ function createPlayer() {
     //_state.paused = false
     //_state.currentTime = 0
     saveState()
+    // TODO: rename
+    playerButtonNextOnClick()
   })
   audio.addEventListener('volumechange', (e) => {
     // The volume has changed.

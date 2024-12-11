@@ -21,8 +21,9 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let prop in _state) { if (res.state[prop]) _state[prop] = res.state[prop] }
     console.log('state updated, check output', _state)
     _playlist = res.playlist
+    //_metadata = res.metadata
     createPlayer()
-    playTrack()
+    await playTrack()
   }, 2000)
 })
 
@@ -47,10 +48,13 @@ async function saveState() {
   }, 1000)
 }
 
-function playTrack() {
+async function playTrack() {
   const track = _playlist.tracks[_state.track]
   if (!track) { console.log('nothing to play', _playlist);return }
-
+  
+  const res = await window.electronAPI.getReleaseMetadata({trackPath:track.trackPath})
+  const metadata = res.data.metadata
+  
   const cover = document.getElementById('img-cover')
   cover.setAttribute('src', track.coverPath)
 
@@ -131,19 +135,20 @@ function createPlayer() {
     {name:'title',val:'add tags comma separated'}
   ],null,tagWrapper)
   const saveTagsButton = ce('button',[{name:'id',val:'btn-save-tags'}],'SAVE',tagWrapper)
+  const tagDisplay = ce('div',[{name:'id',val:'div-display-tags'}],null,tagWrapper)
   saveTagsButton.addEventListener('click', onSaveTagsClick)
 }
 
-function playerButtonNextOnClick() {
+async function playerButtonNextOnClick() {
   if (_state.track+1 <= _playlist.tracks.length) {
     _state.track+=1
-    playTrack()
+    await playTrack()
   }
 }
-function playerButtonPreviousOnClick() {
+async function playerButtonPreviousOnClick() {
   if (_state.track > 1) {
     _state.track-=1
-    playTrack()
+    await playTrack()
   }
 }
 
@@ -168,6 +173,7 @@ async function onSaveTagsClick() {
     tags
   }
   const res = await window.electronAPI.saveTags(args)
+  console.log(`onSaveTagsClick result`, res)
   /*
     res = {
       message: 'sorry no tags saved because you dubm',
@@ -180,18 +186,6 @@ async function onSaveTagsClick() {
   // would like a message tbh
 }
 
-function playFirstSong(playlist) {
-  const root = document.getElementById('root')
-  while (root.firstChild) { root.removeChild(root.firstChild) }
-  const audio = ce('audio', [
-    {name:'controls',val:''},
-    {name:'src',val:playlist.tracks[0].trackPath},
-    {name:'id',val:'audio-playlist'},
-  ],null,root)
-  setTimeout(() => {
-    document.getElementById('audio-playlist').play()
-  },1000)
-}
 // utility
 function ce(type, attribs = [], text = null, parent = null) {
   const element = document.createElement(type)

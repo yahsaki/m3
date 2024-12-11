@@ -29,7 +29,7 @@ const entities = {
       {
         // NOTE: sources can have the same exact album which will clap the current logic. sources should be named(uniqified) to prevent this.
         // I dont plan on ever scanning more than one music folder but in the case I do then this will need to be fixed
-        path: 'D:\\Music\\!Bandcamp',
+        path: 'A:\\music\\!Bandcamp',
         type: 'bandcamp',
       }
     ],
@@ -53,7 +53,7 @@ const api = {
     // entity: saving this data because this will suck having to refetch this all on every load
     let entityDataPath = path.join(entityPath, 'data.json')
     let entityData
-    if (!fs.existsSync()) {
+    if (!fs.existsSync(entityDataPath)) {
       entityData = JSON.parse(JSON.stringify(entity))
       for (let i = 0; i < entityData.sources.length; i++) {
         const source = entityData.sources[i]
@@ -93,7 +93,7 @@ const api = {
     console.log('alright I think everything is handled now')
     return {
       playlist: defaultPlaylist,
-      entityData,
+      metadata: entityData,
       state,
     }
   },

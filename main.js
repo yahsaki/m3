@@ -27,7 +27,7 @@ app.whenReady().then(() => {
     }
   })
   ipcMain.handle('saveTags', saveTags)
-
+  ipcMain.handle('getReleaseMetadata', getReleaseMetadata)
   createWindow()
   _data = m3.init()
   console.log('data', _data)
@@ -41,6 +41,7 @@ app.whenReady().then(() => {
 
 async function saveState(event, args) { await m3.state.save(args);return }
 async function saveTags(event, args) { await m3.tags.save(args);return }
+async function getReleaseMetadata(event, args) {  await m3.metadata.get(args);return }
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

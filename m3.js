@@ -30,7 +30,7 @@ const entities = {
       {
         // NOTE: sources can have the same exact album which will clap the current logic. sources should be named(uniqified) to prevent this.
         // I dont plan on ever scanning more than one music folder but in the case I do then this will need to be fixed
-        path: 'D:\\Music\\!Bandcamp',
+        path: 'C:\\_test_music_folder',
         type: 'bandcamp',
       }
     ],

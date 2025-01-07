@@ -54,11 +54,13 @@ async function playTrack() {
 
   // fetch tags
   const getTagsResult = await window.electronAPI.getTags({
-    trackPath: decodeURI(document.getElementById('audio-player').src.split('file:///')[1]),
+    trackPath: track.trackPath,
   })
   console.log('getTagResult', getTagsResult)
   let tags = []
   if (getTagsResult.success) {tags = getTagsResult.data.tags}
+  const tagDisplay = document.getElementById('tag-display')
+  tagDisplay.innerText = `tags: ${tags.join(', ')}`
 
   const cover = document.getElementById('img-cover')
   cover.setAttribute('src', track.coverPath)
@@ -141,6 +143,7 @@ function createPlayer() {
   ],null,tagWrapper)
   const saveTagsButton = ce('button',[{name:'id',val:'btn-save-tags'}],'SAVE',tagWrapper)
   saveTagsButton.addEventListener('click', onSaveTagsClick)
+  tagDisplay = ce('div',[{name:'class',val:'tag-display'},{name:'id',val:'tag-display'}],null,tagWrapper)
 }
 
 function playerButtonNextOnClick() {

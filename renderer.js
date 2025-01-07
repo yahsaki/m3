@@ -21,6 +21,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let prop in _state) { if (res.state[prop]) _state[prop] = res.state[prop] }
     console.log('state updated, check output', _state)
     _playlist = res.playlist
+    if (res.state) { _state = res.state }
     createPlayer()
     playTrack()
   }, 2000)
@@ -47,9 +48,17 @@ async function saveState() {
   }, 1000)
 }
 
-function playTrack() {
+async function playTrack() {
   const track = _playlist.tracks[_state.track]
   if (!track) { console.log('nothing to play', _playlist);return }
+
+  // fetch tags
+  const getTagsResult = await window.electronAPI.getTags({
+    trackPath: decodeURI(document.getElementById('audio-player').src.split('file:///')[1]),
+  })
+  console.log('getTagResult', getTagsResult)
+  let tags = []
+  if (getTagsResult.success) {tags = getTagsResult.data.tags}
 
   const cover = document.getElementById('img-cover')
   cover.setAttribute('src', track.coverPath)
@@ -106,8 +115,8 @@ function createPlayer() {
     //_state.paused = false
     //_state.currentTime = 0
     saveState()
-    // TODO: rename
-    playerButtonNextOnClick()
+
+    playNextTrack()
   })
   audio.addEventListener('volumechange', (e) => {
     // The volume has changed.
@@ -135,13 +144,20 @@ function createPlayer() {
 }
 
 function playerButtonNextOnClick() {
+  playNextTrack()
+}
+function playerButtonPreviousOnClick() {
+  playPreviousTrack()
+}
+
+function playNextTrack() {
   if (_state.track+1 <= _playlist.tracks.length) {
     _state.track+=1
     playTrack()
   }
 }
-function playerButtonPreviousOnClick() {
-  if (_state.track > 1) {
+function playPreviousTrack() {
+  if (_state.track >= 1) {
     _state.track-=1
     playTrack()
   }

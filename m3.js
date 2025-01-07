@@ -4,6 +4,7 @@ const metadata = require('./lib/metadata')
 const directory = require('./lib/directory')
 const playlist = require('./lib/playlist')
 const fs = require('node:fs')
+
 /*
   we're going to name batches of folders as an entity
 
@@ -99,6 +100,38 @@ const api = {
   },
   tags: {
     save: metadata.tags.save,
+    get: async (args) => {
+      const trackPath = args.trackPath
+      const response = JSON.parse(JSON.stringify(util.template.response))
+      console.log('m3.tags.get', response, trackPath)
+
+      const pathObj = path.parse(trackPath)
+      const filename = pathObj.base
+      console.log('m3.tags.get po', pathObj)
+
+      const dataFilePath = path.join(pathObj.dir, util.settings.dataFileName)
+      const dataFile = util.fs.readJson(dataFilePath)
+      console.log('df', dataFile)
+
+      if (!dataFile) {
+        response.message = `failed to find data file at path '${dataFilePath}'`
+        return response
+      }
+
+      const track = dataFile.tracks.find(x => x.filename === filename)
+      console.log('track', track)
+      if (!track) {
+        response.message = `failed to find track '${filename}' in data file '${dataFilePath}'`
+        return response
+      }
+
+      response.success = true
+      response.data = {
+        tags: track.tags,
+        comments: track.comments
+      }
+      return response
+    },
   },
   state: {
     get: () => {

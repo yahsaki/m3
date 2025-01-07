@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getData: () => ipcRenderer.invoke('getData'),
   saveState: (state) => ipcRenderer.invoke('saveState', state),
   saveTags: (args) => ipcRenderer.invoke('saveTags', args),
+  getTags: (args) => ipcRenderer.invoke('getTags', args)
 })

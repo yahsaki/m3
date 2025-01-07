@@ -27,7 +27,10 @@ app.whenReady().then(() => {
     }
   })
   ipcMain.handle('saveTags', saveTags)
-
+  ipcMain.handle('getTags', async (event, args) => {
+    const data = await m3.tags.get(args)
+    return data
+  })
   createWindow()
   _data = m3.init()
   console.log('data', _data)

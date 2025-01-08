@@ -26,7 +26,9 @@ app.whenReady().then(() => {
       state: _data.state,
     }
   })
-  ipcMain.handle('saveTags', saveTags)
+  ipcMain.handle('saveTags', async (event, args) => {
+    return await m3.tags.save(args)
+  })
   ipcMain.handle('getTags', async (event, args) => {
     const data = await m3.tags.get(args)
     return data

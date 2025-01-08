@@ -48,19 +48,22 @@ async function saveState() {
   }, 1000)
 }
 
-async function playTrack() {
-  const track = _playlist.tracks[_state.track]
-  if (!track) { console.log('nothing to play', _playlist);return }
-
-  // fetch tags
+async function getMetadata(trackPath) {
   const getTagsResult = await window.electronAPI.getTags({
-    trackPath: track.trackPath,
+    trackPath: trackPath,
   })
   console.log('getTagResult', getTagsResult)
   let tags = []
   if (getTagsResult.success) {tags = getTagsResult.data.tags}
   const tagDisplay = document.getElementById('tag-display')
   tagDisplay.innerText = `tags: ${tags.join(', ')}`
+}
+async function playTrack() {
+  const track = _playlist.tracks[_state.track]
+  if (!track) { console.log('nothing to play', _playlist);return }
+
+  // fetch tags
+  await getMetadata(track.trackPath)
 
   const cover = document.getElementById('img-cover')
   cover.setAttribute('src', track.coverPath)
@@ -182,11 +185,17 @@ async function onSaveTagsClick() {
     tags.push(tag)
   }
   if (!tags.length) return
+  const trackPath = decodeURI(document.getElementById('audio-player').src.split('file:///')[1])
   const args = {
-    trackPath: decodeURI(document.getElementById('audio-player').src.split('file:///')[1]),
+    trackPath,
     tags
   }
   const res = await window.electronAPI.saveTags(args)
+  console.log('saveTagsRes', res)
+  if (res.success) {
+    await getMetadata(trackPath)
+    document.getElementById('txt-tags').value = ""
+  }
   /*
     res = {
       message: 'sorry no tags saved because you dubm',
